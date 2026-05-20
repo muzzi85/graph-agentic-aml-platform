@@ -105,6 +105,7 @@ The platform focuses on:
 - laundering pattern detection
 - connected suspicious accounts
 - AI-assisted compliance investigation
+<img width="1536" height="1024" alt="ChatGPT Image May 21, 2026, 12_20_46 AM" src="https://github.com/user-attachments/assets/0c0a515c-5a48-4496-942b-f8a289e0548e" />
 
 ---
 
