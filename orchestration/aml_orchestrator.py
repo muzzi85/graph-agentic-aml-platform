@@ -18,6 +18,10 @@ from rag.graph_retrieval import (
     build_investigation_context
 )
 
+from rag.knowledge_rag import (
+    retrieve_knowledge
+)
+
 def retrieve_context(
     state: AMLState
 ):
@@ -138,6 +142,12 @@ def aml_agent(
         context["cycles"]
     )
 
+    knowledge_context = retrieve_knowledge(
+
+        "Explain AML graph risk and suspicious topology"
+    )
+
+
     prompt = f"""
 
     You are an AML investigation AI.
@@ -176,6 +186,10 @@ def aml_agent(
 
     Betweenness Centrality:
     {graph_metrics["betweenness_centrality"]:.6f}
+
+    AML KNOWLEDGE:
+
+    {knowledge_context}
 
     Explain:
     1. Why this account appears suspicious

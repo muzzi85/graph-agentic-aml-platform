@@ -14,20 +14,33 @@ from deepeval.metrics import (
     ContextualRecallMetric
 )
 
+from rag.knowledge_rag import (
+    retrieve_knowledge
+)
+
+knowledge_context = retrieve_knowledge(
+
+    "AML scoring framework and betweenness centrality"
+)
+
 retrieval_context = [
 
+    knowledge_context,
+
     """
+
     Account ID: 6192
 
-    Final AML Score: 0.9 # scale 0-1, 1 is highly suspicious
+    Final AML Score: 0.9
 
-    Suspicious Neighbor Count: 540 # above 100 is suspicious
+    Suspicious Neighbor Count: 540
 
-    Detected Cycles: 20 # above 10 is suspicious
+    Detected Cycles: 20
 
-    Degree Centrality: 0.8 # scale 0-1, 1 is highly suspicious
+    Degree Centrality: 0.8
 
-    Betweenness Centrality: 0.8 # scale 0-1, 1 is highly suspicious
+    Betweenness Centrality: 0.8
+
     """
 ]
 
