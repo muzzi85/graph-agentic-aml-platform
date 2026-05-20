@@ -764,3 +764,20 @@ with:
 - grounded AI reporting
 - enterprise-style orchestration
 
+⚠️ Copyright & License
+Copyright © 2026 Mustafa Alhamdi. All rights reserved.
+
+This repository and its contents are provided for educational, research, and portfolio purposes only.
+
+Unauthorized copying, redistribution, commercial usage, or reproduction of this codebase without explicit permission is prohibited.
+
+Third-party libraries and frameworks used in this project remain subject to their respective licenses.
+
+👨‍💻 Author
+Built as an applied AI engineering project exploring:
+
+computer vision
+distributed AI systems
+cloud-native ML infrastructure
+scalable inference architectures
+symbolic + probabilistic AI systems
