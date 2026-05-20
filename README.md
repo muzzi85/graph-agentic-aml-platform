@@ -55,6 +55,7 @@
           │ Report + Graph Explainability  │
           └────────────────────────────────┘
 ```
+<img width="1536" height="1024" alt="ChatGPT Image May 21, 2026, 12_20_46 AM" src="https://github.com/user-attachments/assets/9d3ad349-b65a-4eec-991b-d6797b4aa28c" />
 
 ---
 
