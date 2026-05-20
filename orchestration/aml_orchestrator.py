@@ -1,5 +1,6 @@
 from typing import TypedDict
 import ollama
+from langgraph.graph import StateGraph
 
 class AMLState(TypedDict):
 
@@ -78,6 +79,44 @@ def analyze_aml_risk(
     return {
         "aml_analysis": analysis
     }
+
+# --------------------------------------------------
+# HALLUCINATION / GROUNDEDNESS CHECK
+# --------------------------------------------------
+
+FORBIDDEN_TERMS = [
+
+    "malware",
+    "ransomware",
+    "hacker",
+    "cyberattack",
+    "drugs",
+    "counterfeit",
+    "terrorism",
+    "weapon"
+]
+
+
+def groundedness_check(
+    llm_output
+):
+
+    hallucinations = []
+
+    lower_output = llm_output.lower()
+
+    for term in FORBIDDEN_TERMS:
+
+        if term in lower_output:
+
+            hallucinations.append(term)
+
+    return hallucinations
+
+
+# --------------------------------------------------
+# AML AGENT
+# --------------------------------------------------
 
 def aml_agent(
     state: AMLState
@@ -165,6 +204,22 @@ def aml_agent(
     ][
         "content"
     ]
+
+    hallucinations = groundedness_check(
+    analysis
+    )
+
+    if hallucinations:
+
+        analysis += f"""
+
+        [GROUNDING WARNING]
+
+        Potential unsupported concepts detected:
+
+        {hallucinations}
+
+        """
 
     return {
 
@@ -332,7 +387,6 @@ def synthesize_investigation(
     return {
         "final_report": final_report
     }
-from langgraph.graph import StateGraph
 
 graph_builder = StateGraph(
     AMLState
