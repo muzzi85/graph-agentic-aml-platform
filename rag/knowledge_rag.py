@@ -109,10 +109,10 @@ def retrieve_knowledge(
 
     return formatted_knowledge
 
-knowledge = retrieve_knowledge(
+# knowledge = retrieve_knowledge(
 
-    "- AML Score: 0.92 - Suspicious Neighbors: 540 - Detected Cycles: 20 - Degree Centrality: 0.81 - Betweenness Centrality: 0.79" #Explain AML graph topology risk
-)
+#     "- AML Score: 0.92 - Suspicious Neighbors: 540 - Detected Cycles: 20 - Degree Centrality: 0.81 - Betweenness Centrality: 0.79" #Explain AML graph topology risk
+# )
 
-print(knowledge)
+# print(knowledge)
 

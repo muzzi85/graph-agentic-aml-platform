@@ -14,6 +14,16 @@ class AMLState(TypedDict):
 
     final_report: str
 
+from orchestration.symbolic_reasoning import (
+    compute_symbolic_risk
+)
+
+
+
+from memory.vector_memory import (
+    retrieve_similar_cases
+)
+
 from rag.graph_retrieval import (
     build_investigation_context
 )
@@ -117,14 +127,24 @@ def groundedness_check(
 
     return hallucinations
 
-
 # --------------------------------------------------
 # AML AGENT
 # --------------------------------------------------
 
+from rag.knowledge_rag import (
+    retrieve_knowledge
+)
+
+from memory.vector_memory import (
+    retrieve_similar_cases
+)
 def aml_agent(
     state: AMLState
 ):
+
+    # ------------------------------------------
+    # RETRIEVE INVESTIGATION CONTEXT
+    # ------------------------------------------
 
     context = state[
         "investigation_context"
@@ -142,35 +162,139 @@ def aml_agent(
         context["cycles"]
     )
 
-    knowledge_context = retrieve_knowledge(
+    # ------------------------------------------
+    # SYMBOLIC AML REASONING
+    # ------------------------------------------
 
-        "Explain AML graph risk and suspicious topology"
+    symbolic_findings = compute_symbolic_risk(
+
+        graph_metrics,
+
+        suspicious_neighbors,
+
+        cycles
     )
 
+    # ------------------------------------------
+    # SYMBOLIC AML CLASSIFICATION
+    # ------------------------------------------
 
-    prompt = f"""
+    aml_score = graph_metrics[
+        "final_aml_score"
+    ]
 
-    You are an AML investigation AI.
+    if aml_score > 0.005:
 
-    ONLY use the provided graph evidence.
+        risk_level = "HIGH"
 
-    DO NOT mention:
-    - malware
-    - ransomware
-    - cybersecurity
-    - hacking
-    - attacks
+    elif aml_score > 0.001:
 
-    ONLY discuss:
-    - transaction behavior
-    - suspicious graph topology
-    - laundering indicators
-    - suspicious connectivity
+        risk_level = "MEDIUM"
 
-    CASE DATA:
+    else:
 
-    Account ID:
-    {context["account_id"]}
+        risk_level = "LOW"
+
+    # ------------------------------------------
+    # CONNECTIVITY ASSESSMENT
+    # ------------------------------------------
+
+    if suspicious_neighbors > 50:
+
+        connectivity_risk = (
+            "High suspicious connectivity"
+        )
+
+    elif suspicious_neighbors > 10:
+
+        connectivity_risk = (
+            "Moderate suspicious connectivity"
+        )
+
+    else:
+
+        connectivity_risk = (
+            "Low suspicious connectivity"
+        )
+
+    # ------------------------------------------
+    # CYCLE ASSESSMENT
+    # ------------------------------------------
+
+    if cycles > 10:
+
+        cycle_risk = (
+            "Potential laundering cycles detected"
+        )
+
+    elif cycles > 0:
+
+        cycle_risk = (
+            "Limited laundering cycle exposure"
+        )
+
+    else:
+
+        cycle_risk = (
+            "No laundering cycles detected"
+        )
+
+    # ------------------------------------------
+    # CENTRALITY ASSESSMENT
+    # ------------------------------------------
+
+    if (
+
+        graph_metrics[
+            "betweenness_centrality"
+        ] > 0.5
+
+    ):
+
+        routing_risk = (
+            "High intermediary routing behavior"
+        )
+
+    else:
+
+        routing_risk = (
+            "Limited intermediary routing exposure"
+        )
+    formatted_findings = "\n".join(
+
+        f"- {finding}"
+
+        for finding in symbolic_findings
+    )
+
+    # ------------------------------------------
+    # LINKED SUSPICIOUS ACCOUNTS
+    # ------------------------------------------
+
+    linked_accounts = [
+
+        f"{acc['ACCOUNT_ID']} "
+        f"(AML Score: "
+        f"{acc['final_aml_score']:.4f})"
+
+        for acc in context[
+            "suspicious_neighbors"
+        ][:5]
+    ]
+
+    formatted_accounts = "\n".join(
+
+        f"- {acc}"
+
+        for acc in linked_accounts
+    )
+
+    # ------------------------------------------
+    # BUILD INVESTIGATION SUMMARY
+    # FOR VECTOR MEMORY RETRIEVAL
+    # ------------------------------------------
+
+    investigation_summary = f"""
 
     Final AML Score:
     {graph_metrics["final_aml_score"]:.6f}
@@ -187,18 +311,70 @@ def aml_agent(
     Betweenness Centrality:
     {graph_metrics["betweenness_centrality"]:.6f}
 
-    AML KNOWLEDGE:
-
-    {knowledge_context}
-
-    Explain:
-    1. Why this account appears suspicious
-    2. Graph-based laundering concerns
-    3. Recommended AML action
-
-    Keep answer concise and professional.
+    PageRank:
+    {graph_metrics["pagerank"]:.6f}
 
     """
+
+    # ------------------------------------------
+    # KNOWLEDGE RAG
+    # ------------------------------------------
+
+    knowledge_context = retrieve_knowledge(
+
+        "AML scoring framework and "
+        "betweenness centrality"
+    )
+
+    # ------------------------------------------
+    # VECTOR MEMORY RETRIEVAL
+    # ------------------------------------------
+
+    similar_cases = retrieve_similar_cases(
+
+        investigation_summary,
+        n_results=1
+    )
+
+    # ------------------------------------------
+    # AML PROMPT
+    # ------------------------------------------
+
+    prompt = f"""
+
+    Generate a concise AML investigation
+    summary using the findings below.
+
+    CURRENT ACCOUNT
+
+    Account ID:
+    {context["account_id"]}
+
+    AML Risk Level:
+    {risk_level}
+
+    Connectivity Assessment:
+    {connectivity_risk}
+
+    Cycle Assessment:
+    {cycle_risk}
+
+    Routing Assessment:
+    {routing_risk}
+
+    Linked Suspicious Accounts:
+
+    {formatted_accounts}
+
+    Use a professional AML tone.
+
+    Keep response under 150 words.
+
+    """
+
+    # ------------------------------------------
+    # LLM GENERATION
+    # ------------------------------------------
 
     response = ollama.chat(
 
@@ -219,21 +395,31 @@ def aml_agent(
         "content"
     ]
 
+    # ------------------------------------------
+    # GROUNDEDNESS CHECK
+    # ------------------------------------------
+
     hallucinations = groundedness_check(
-    analysis
+        analysis
     )
 
     if hallucinations:
 
         analysis += f"""
 
-        [GROUNDING WARNING]
+        ==========================================
+        GROUNDING WARNING
+        ==========================================
 
         Potential unsupported concepts detected:
 
         {hallucinations}
 
         """
+
+    # ------------------------------------------
+    # RETURN AML ANALYSIS
+    # ------------------------------------------
 
     return {
 
