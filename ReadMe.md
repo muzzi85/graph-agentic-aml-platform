@@ -1,3 +1,74 @@
+Business Problem
+
+Modern financial institutions process massive volumes of transactional activity across:
+
+retail banking
+cross-border transfers
+online banking payments
+shell account activity
+layered transaction routing
+interconnected customer networks
+
+Traditional AML investigation systems often rely on:
+
+siloed transaction monitoring
+delayed batch analysis
+manual compliance reviews
+static rules engines
+disconnected investigation tooling
+
+This creates major challenges:
+
+delayed laundering detection
+poor graph visibility
+limited explainability
+high false positives
+weak topology intelligence
+slow compliance escalation
+fragmented investigation workflows
+
+This platform solves the problem through an AI-assisted GraphRAG investigation architecture capable of:
+
+analyzing suspicious transaction topology
+detecting laundering connectivity patterns
+identifying suspicious graph exposure
+retrieving historical investigation context
+generating explainable AML investigation reports
+reducing hallucinations using symbolic reasoning
+supporting enterprise-style compliance workflows
+
+Enterprise-style GraphRAG AML investigation platform using:
+
+LangGraph orchestration
+Graph analytics
+Symbolic reasoning
+Knowledge RAG
+Vector memory
+Local LLM inference
+DeepEval evaluation
+Groundedness validation
+Explainable AML investigation workflows
+Overview
+
+This project demonstrates how modern AI investigation systems can combine:
+
+graph intelligence
+symbolic AI
+retrieval-augmented generation (RAG)
+vector memory
+orchestration frameworks
+local LLMs
+
+into a production-style AML investigation architecture.
+
+The platform focuses on:
+
+suspicious transaction topology
+graph explainability
+laundering pattern detection
+connected suspicious accounts
+AI-assisted compliance investigation
+
 # Graph Agentic AML Platform
 
 Enterprise-style GraphRAG AML investigation platform using:
