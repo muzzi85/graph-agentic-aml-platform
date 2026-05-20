@@ -71,6 +71,105 @@ AI-assisted compliance investigation
 
 # Graph Agentic AML Platform
 
+```text
+                    ┌──────────────────────┐
+                    │ Transaction Graph DB │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                 ┌─────────────────────────┐
+                 │ Graph Analytics Engine  │
+                 │ - centrality metrics    │
+                 │ - suspicious neighbors  │
+                 │ - cycle detection       │
+                 └──────────┬──────────────┘
+                            │
+                            ▼
+                ┌──────────────────────────┐
+                │ Symbolic AML Reasoning   │
+                │ - risk classification    │
+                │ - topology assessment    │
+                │ - escalation logic       │
+                └──────────┬───────────────┘
+                           │
+          ┌────────────────┴────────────────┐
+          ▼                                 ▼
+┌───────────────────┐          ┌────────────────────┐
+│ Knowledge RAG     │          │ Vector Memory RAG │
+│ AML semantics     │          │ historical cases  │
+└─────────┬─────────┘          └─────────┬──────────┘
+          │                               │
+          └──────────────┬────────────────┘
+                         ▼
+             ┌──────────────────────────┐
+             │ LangGraph Orchestration  │
+             │ - AML agent              │
+             │ - Fraud agent            │
+             │ - Investigation synthesis│
+             └──────────┬───────────────┘
+                        │
+                        ▼
+             ┌──────────────────────────┐
+             │ Local LLM Summarization  │
+             │ TinyLlama via Ollama     │
+             └──────────┬───────────────┘
+                        │
+                        ▼
+             ┌──────────────────────────┐
+             │ Groundedness Validation  │
+             │ + DeepEval Evaluation    │
+             └──────────┬───────────────┘
+                        │
+                        ▼
+          ┌────────────────────────────────┐
+          │ Enterprise AML Investigation   │
+          │ Report + Graph Explainability  │
+          └────────────────────────────────┘
+```
+
+---
+
+# Business Problem
+
+Modern financial institutions process massive volumes of transactional activity across:
+
+- retail banking
+- cross-border transfers
+- online banking payments
+- shell account activity
+- layered transaction routing
+- interconnected customer networks
+
+Traditional AML investigation systems often rely on:
+
+- siloed transaction monitoring
+- delayed batch analysis
+- manual compliance reviews
+- static rules engines
+- disconnected investigation tooling
+
+This creates major challenges:
+
+- delayed laundering detection
+- poor graph visibility
+- limited explainability
+- high false positives
+- weak topology intelligence
+- slow compliance escalation
+- fragmented investigation workflows
+
+This platform solves the problem through an AI-assisted GraphRAG investigation architecture capable of:
+
+- analyzing suspicious transaction topology
+- detecting laundering connectivity patterns
+- identifying suspicious graph exposure
+- retrieving historical investigation context
+- generating explainable AML investigation reports
+- reducing hallucinations using symbolic reasoning
+- supporting enterprise-style compliance workflows
+
+---
+
 Enterprise-style GraphRAG AML investigation platform using:
 
 - LangGraph orchestration
@@ -411,6 +510,258 @@ Linked Suspicious Accounts:
 
 Recommended Action:
 Escalate to AML investigation team.
+```
+
+---
+
+# Installation Guide
+
+## 1. Clone Repository
+
+```bash
+git clone <your-repository-url>
+cd graph-agentic-aml-platform
+```
+
+---
+
+## 2. Create Virtual Environment
+
+```bash
+python3 -m venv .venv
+```
+
+Activate environment:
+
+### Linux / WSL
+
+```bash
+source .venv/bin/activate
+```
+
+### Windows PowerShell
+
+```powershell
+.venv\Scripts\activate
+```
+
+---
+
+## 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Core packages:
+
+```bash
+pip install langgraph langchain networkx pandas chromadb ollama deepeval
+```
+
+---
+
+## 4. Install Ollama
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+Then pull local model:
+
+```bash
+ollama pull tinyllama
+```
+
+Optional larger models:
+
+```bash
+ollama pull mistral
+ollama pull llama3
+```
+
+---
+
+## 5. Start Ollama
+
+```bash
+ollama serve
+```
+
+Default endpoint:
+
+```text
+http://localhost:11434
+```
+
+---
+
+# Project Structure
+
+```text
+graph-agentic-aml-platform/
+│
+├── orchestration/
+├── graph/
+├── rag/
+├── memory/
+├── validation/
+├── data/
+└── requirements.txt
+```
+
+---
+
+# Major Development Steps
+
+## Step 1 — Build Transaction Graph
+
+Convert banking transactions into graph structures.
+
+Example:
+
+```python
+G.add_edge(sender, receiver)
+```
+
+---
+
+## Step 2 — Generate Graph Features
+
+Compute graph intelligence metrics.
+
+Example:
+
+```python
+nx.degree_centrality(G)
+nx.betweenness_centrality(G)
+```
+
+Features include:
+
+- suspicious neighbors
+- cycle detection
+- graph topology indicators
+- fan-in / fan-out exposure
+
+---
+
+## Step 3 — Build Symbolic AML Engine
+
+Create deterministic AML reasoning logic.
+
+```python
+if suspicious_neighbors > 50:
+
+    connectivity_risk = (
+        "High suspicious connectivity"
+    )
+```
+
+---
+
+## Step 4 — Add Knowledge RAG
+
+Retrieve semantic AML knowledge using ChromaDB.
+
+```python
+collection.query(
+    query_texts=[
+        "betweenness centrality"
+    ]
+)
+```
+
+---
+
+## Step 5 — Add Vector Memory Layer
+
+Store historical investigation patterns.
+
+```python
+memory_collection.add(
+    documents=[summary]
+)
+```
+
+---
+
+## Step 6 — Build LangGraph Workflow
+
+Workflow:
+
+```text
+retrieve_context
+       ↓
+aml_agent
+       ↓
+fraud_agent
+       ↓
+synthesize_investigation
+```
+
+---
+
+## Step 7 — Add Local LLM Summarization
+
+```python
+response = ollama.chat(
+    model="tinyllama",
+    messages=[
+        {
+            "role": "user",
+            "content": prompt
+        }
+    ]
+)
+```
+
+---
+
+## Step 8 — Add Groundedness Validation
+
+```python
+hallucinations = groundedness_check(
+    analysis
+)
+```
+
+---
+
+## Step 9 — Add DeepEval Evaluation
+
+Run evaluation:
+
+```bash
+python -m orchestration.evaluation.deepeval_test
+```
+
+---
+
+# Running The Platform
+
+## Run AML Investigation Workflow
+
+```bash
+python -m orchestration.aml_orchestrator
+```
+
+## Run DeepEval Testing
+
+```bash
+python -m orchestration.evaluation.deepeval_test
+```
+
+## Run Knowledge RAG Retrieval
+
+```bash
+python -m rag.knowledge_rag
+```
+
+## Run Vector Memory Retrieval
+
+```bash
+python -m memory.vector_memory
 ```
 
 ---
