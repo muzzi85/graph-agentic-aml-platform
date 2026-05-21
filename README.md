@@ -1,6 +1,5 @@
 # Graph Agentic AML Platform
 
-
 ```text
                     ┌──────────────────────┐
                     │ Transaction Graph DB │
