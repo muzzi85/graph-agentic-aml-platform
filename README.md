@@ -1,4 +1,4 @@
-# Graph Agentic AML Platform
+# Graph Agentic AML Platform 
 
 ```text
                     ┌──────────────────────┐
